@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login or Sign Up</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2d4159;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .choice-box, .login-signup-box {
+            background-color: white;
+            color: #2d4159;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .choice-box {
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        button {
+            width: 45%;
+            padding: 14px;
+            margin: 10px;
+            background-color: #2d4159;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #1b2a3d;
+        }
+
+        .form-box {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            color: #2d4159;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-box h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2d4159;
+        }
+
+        input[type="text"], input[type="password"], input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #2d4159;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .login-button:hover {
+            background-color: #1b2a3d;
+        }
+
+        .home-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #2d4159;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .home-button:hover {
+            background-color: #1b2a3d;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <a href="art.html" class="home-button">Home</a>
+
+    <div class="container">
+        <!-- Step 1: Show Login or Sign Up options -->
+        <div class="choice-box" id="choiceBox">
+            <h2>Welcome!</h2>
+            <p>Select an option to proceed:</p>
+            <button onclick="showLoginSignup('login')">Login</button>
+            <button onclick="showLoginSignup('signup')">Sign Up</button>
+        </div>
+
+        <!-- Step 2: Choose between Customer or Seller -->
+        <div class="choice-box hidden" id="roleBox">
+            <h2>Are you a Customer or a Seller?</h2>
+            <button onclick="showForm('customer')">Customer</button>
+            <button onclick="showForm('seller')">Seller</button>
+        </div>
+
+        <!-- Step 3: Customer or Seller Login/Signup Form -->
+        <!-- Customer Form -->
+        <div class="form-box hidden" id="customerForm">
+            <h3 id="customerHeading">Customer Login</h3>
+            <form action="customer_process.html" method="POST">
+                <input type="email" id="customer-email" name="email" placeholder="Email" required>
+                <input type="text" id="customer-username" name="username" placeholder="Username" required>
+                <input type="password" id="customer-password" name="password" placeholder="Password" required>
+                <div id="confirmPasswordCustomer" class="hidden">
+                    <input type="password" id="customer-confirm-password" name="confirm-password" placeholder="Confirm Password" required>
+                </div>
+                <button type="submit" class="login-button" id="customerSubmit">Login</button>
+            </form>
+        </div>
+
+        <!-- Seller Form -->
+        <div class="form-box hidden" id="sellerForm">
+            <h3 id="sellerHeading">Seller Login</h3>
+            <form action="seller_process.html" method="POST">
+                <input type="email" id="seller-email" name="email" placeholder="Email" required>
+                <input type="text" id="seller-username" name="username" placeholder="Username" required>
+                <input type="password" id="seller-password" name="password" placeholder="Password" required>
+                <div id="confirmPasswordSeller" class="hidden">
+                    <input type="password" id="seller-confirm-password" name="confirm-password" placeholder="Confirm Password" required>
+                </div>
+                <button type="submit" class="login-button" id="sellerSubmit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let selectedOption = '';
+
+        function showLoginSignup(option) {
+            // Hide the choice box for login/signup
+            document.getElementById('choiceBox').classList.add('hidden');
+            // Show the role selection box
+            document.getElementById('roleBox').classList.remove('hidden');
+            // Store whether user selected 'login' or 'signup'
+            selectedOption = option;
+        }
+
+        function showForm(role) {
+            // Hide the role box
+            document.getElementById('roleBox').classList.add('hidden');
+
+            // Display relevant form based on role selection
+            if (role === 'customer') {
+                document.getElementById('customerForm').classList.remove('hidden');
+                if (selectedOption === 'signup') {
+                    document.getElementById('customerHeading').innerText = 'Customer Sign Up';
+                    document.getElementById('customerSubmit').innerText = 'Sign Up';
+                    document.getElementById('customerForm').querySelector('form').action = 'customer_signup_process.html';
+                    document.getElementById('confirmPasswordCustomer').classList.remove('hidden');
+                }
+            } else if (role === 'seller') {
+                document.getElementById('sellerForm').classList.remove('hidden');
+                if (selectedOption === 'signup') {
+                    document.getElementById('sellerHeading').innerText = 'Seller Sign Up';
+                    document.getElementById('sellerSubmit').innerText = 'Sign Up';
+                    document.getElementById('sellerForm').querySelector('form').action = 'seller_signup_process.html';
+                    document.getElementById('confirmPasswordSeller').classList.remove('hidden');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
